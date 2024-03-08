@@ -1,0 +1,63 @@
+
+#ifndef SHIPCLASSES_SHIPS_H
+#define SHIPCLASSES_SHIPS_H
+
+static constexpr float RSexapeX{1.5};
+static constexpr float HSexapeX{0.5};
+static constexpr float RSdamageX{1.5};
+static constexpr float HSdamageX{0.5};
+
+class MainShip{
+public:
+     int fuel;
+     int hp;
+     int money;
+     float damageX;
+     float escapeX;
+
+public:
+    MainShip(){
+        fuel = 100;
+        hp = 100;
+        money = 0;
+        damageX =1;
+        escapeX =1;
+        std::cout << "constructor of MS" << "\n";
+    }
+
+};
+
+
+
+class NormalShip : public MainShip{
+NormalShip() : MainShip(){}
+
+};
+
+
+
+class RapidShip : public MainShip{
+
+public:
+RapidShip() : MainShip(){
+    escapeX = escapeX*RSexapeX;
+    damageX = damageX*RSdamageX;
+    std::cout << "constructor of RS" << "\n";
+}
+
+};
+
+
+class HeavyShip : public MainShip{
+public:
+    HeavyShip() : MainShip(){
+        escapeX = escapeX*HSexapeX;
+        damageX = damageX*HSdamageX;
+        std::cout << "constructor of RS" << "\n";
+    }
+
+};
+
+
+
+#endif //SHIPCLASSES_SHIPS_H
