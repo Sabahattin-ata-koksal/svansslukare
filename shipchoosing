@@ -1,0 +1,44 @@
+#include "ship.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+
+inline void LowerCase(std::string &ToLower){
+
+    std::transform(ToLower.begin(), ToLower.end(), ToLower.begin(), ::tolower);
+}
+
+
+void ShipChoosing(){
+    std::string ChosenType;
+    std::vector<std::string>ShipTypes{"hizli", "guclu", "normal"};
+
+    puts("3 tip gemimiz bulunmaktadir hizli gemi, guclu gemi ve normal gemi hangisini secmek istersiniz");
+    puts("hizli, guclu veya normal yaziniz");
+
+    std::getline(std::cin, ChosenType);
+    LowerCase(ChosenType);
+
+
+    for(const std::string &ShipType : ShipTypes){
+       if(ChosenType == ShipType){
+           puts("gecerli bir tur girdiniz");
+           break;
+       }
+       else if(ShipType == ShipTypes.back()){
+           puts("gecerli bir sonuc girmedin bitch");
+       }
+    }
+
+    if(ChosenType == ShipTypes.at(0)){
+        RapidShip PlayerShip;
+    }
+    else if(ChosenType == ShipTypes.at(1)){
+        HeavyShip PlayerShip;
+    }
+    else if(ChosenType == ShipTypes.at(2)){
+        NormalShip PlayerShip;
+    }
+}
