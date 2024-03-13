@@ -1,0 +1,30 @@
+#include <iostream>
+#include "ship.h"
+#include "events.h"
+#include <vector>
+#include <string>
+
+void ShipChoosing(std::vector<std::string> vector, std::string string);
+void print();
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, Eventfull* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType);
+
+int main() {
+
+    std::string ChosenType;
+    std::vector<std::string>ShipTypes{"hizli", "guclu", "normal"};
+    RapidShip RShip;
+    NormalShip NShip;
+    HeavyShip HShip;
+    Eventfull* GameObject = nullptr;
+
+    print();
+    std::getline(std::cin, ChosenType);
+
+    ShipChoosing(ShipTypes, ChosenType);
+
+    SetPointer(RShip, HShip, NShip, GameObject, ShipTypes, ChosenType);
+
+    return 0;
+}
+
+
