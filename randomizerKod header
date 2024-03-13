@@ -1,0 +1,118 @@
+#ifndef UNTITLED_RANDOMIZERKOD_H
+#define UNTITLED_RANDOMIZERKOD_H
+#include <iostream>
+#include <cstdlib>
+class Randomizer {
+public:
+
+    int firstRandom(){
+        srand(time(NULL));
+        int result = 1 + rand()%3;
+        return result;
+    }
+
+    int AsteroidBelt(float x){
+        int xYeni = int(x) * 10;
+        int result1, result2, result3 = 0;
+        srand(time(NULL)); // burada her case'te eğer 0 gelirse gemi hasar almayacak, 1 gelirse 10 hasar alacak
+        switch(xYeni){
+            case 5:
+                result1 = 1 + rand()%4;
+                if (result1 == 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 10:
+                result2 = 1 + rand()%4;
+                if (result2 <= 2){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 15:
+                result3 = 1 +rand()%4;
+                if (result3 <= 3){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+        }
+
+    }
+
+    int AbandonedPlanet(){
+        srand(time(NULL));
+        int result = rand()%2; // 0 gelirse para, 1 gelirse korsanlar gelecek
+        return result;
+    }
+
+
+    int PiratesEscape(float x){
+        int xYeni = int(x) * 10;
+        int result1, result2, result3 = 0;
+        srand(time(NULL)); // kaçabilmek için hepsinde 0 gelmesi lazım
+        switch(xYeni){
+            case 5:
+                result1 = 1 + rand()%4;
+                if (result1 == 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 10:
+                result2 = 1 + rand()%4;
+                if (result2 <= 2){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 15:
+                result3 = 1 + rand()%4;
+                if (result3 <= 3){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+        }
+    }
+
+    int PiratesFight(){
+        srand(time(NULL)); // 0 gelirse bi şey yok, 1 gelirse 30 hasar alacak
+        int result = rand()%2;
+        if (result == 0){
+            return 0;
+        }
+        else if(result == 1){
+            return 1;
+        }
+    }
+
+    int PiratesBargain(){
+        srand(time(NULL)); // 1 gelirse 10, 2 gelirse 20, 3 gelirse 30 isteyecekler
+        int result = 1 + rand()%3;
+        switch(result){
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+        }
+
+    }
+
+};
+
+#endif //UNTITLED_RANDOMIZERKOD_H
