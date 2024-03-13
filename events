@@ -35,7 +35,7 @@ public:
             object.incrementMoney();
             std::cout <<"10 altın kazandınız\n";
         }
-        else(result == 1) {
+        else {
             std::cout <<"Korsanlar geliyor\n";
 
         }
