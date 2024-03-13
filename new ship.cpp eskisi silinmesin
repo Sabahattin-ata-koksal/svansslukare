@@ -1,0 +1,54 @@
+#include "ship.h"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+#include "events.h"
+
+inline void LowerCase(std::string &ToLower){
+
+    std::transform(ToLower.begin(), ToLower.end(), ToLower.begin(), ::tolower);
+}
+
+
+void ShipChoosing(const std::vector<std::string> ShipTypes, std::string ChosenType){
+
+    LowerCase(ChosenType);
+
+
+    for(const std::string &ShipType : ShipTypes){
+       if(ChosenType == ShipType){
+           puts("gecerli bir tur girdiniz");
+           break;
+       }
+       else if(ShipType == ShipTypes.back()){
+           puts("gecerli bir sonuc girmedin bitch");
+       }
+    }
+
+
+}
+
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, Eventfull* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType){
+
+    if(ChosenType == ShipTypes.at(0)){
+        GameObject = &RShip;
+
+    }
+    else if(ChosenType == ShipTypes.at(1)){
+        GameObject = &HShip;
+    }
+    else if(ChosenType == ShipTypes.at(2)){
+        GameObject = &NShip;
+    }
+
+}
+
+void print(){
+    puts("oyunumuza hosgeldiniz");
+    puts("3 tip gemimiz bulunmaktadir hizli gemi, guclu gemi ve normal gemi hangisini secmek istersiniz");
+    puts("hizli, guclu veya normal yaziniz");
+}
+
+
