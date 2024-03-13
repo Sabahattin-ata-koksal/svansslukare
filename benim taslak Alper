@@ -1,0 +1,47 @@
+//
+// Created by Alper Acar on 13.03.2024.
+//
+
+#ifndef SHIPCLASSES_EVENTS_H
+#define SHIPCLASSES_EVENTS_H
+#include "ship.h"
+#include <iostream>
+class AllEvents {
+    int result;
+public:
+    inline void AsteroidBelt() {
+        result = object.AsteroidBelt();
+        if(result == 0) {
+            std::cout <<"Geminiz hasar almayacak!" <<"\n";
+        }
+        else(result == 1) {
+            object.decrementHp();
+            std::cout <<"Geminiz 10 hasar alacak" <<"\n";
+        }
+
+    }
+
+    inline void AbandonedPlanet() {
+        result = object.AbandonedPlanet();
+        if(result == 0) {
+            object.incrementMoney();
+            std::cout <<"10 altın kazandınız:" <<"\n";
+        }
+        else(result == 1) {
+            std::cout <<"Korsanlar geliyor" <<"\n";
+        }
+
+    }
+
+    friend class MainShip;
+};
+
+class pirates : public AllEvents{
+
+    friend class MainShip;
+};
+
+
+#endif //SHIPCLASSES_EVENTS_H
+
+
