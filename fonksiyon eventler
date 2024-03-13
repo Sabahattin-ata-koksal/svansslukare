@@ -1,0 +1,148 @@
+
+#ifndef SVANSSSLUKARE_EVENT_H
+#define SVANSSSLUKARE_EVENT_H
+#include <iostream>
+#include "ship.h"
+#include "randomizer.h"
+
+
+static int result{0};
+int resultEscape;
+int resultFight;
+int resultBargain;
+int resultBargainQuantity;
+int PiratesChoiceNumber;
+bool PiratesChoiceNumberCorrectness;
+bool BargainCondition; //global olursa değeri değişmez ki o zaman işe yaramaz
+
+int EventAbandonedPlanet(MainShip* object);
+void EventAsteroidBelt(MainShip* object);
+void EventPiratesEscape(MainShip* object);
+void PiratesChoices(MainShip* object);
+void EventPiratesFight(MainShip* object);
+void EventPiratesBargain(MainShip* object);
+
+
+
+void EventAsteroidBelt(MainShip* object) {
+    result = object->AsteroidBelt(object->escapeX);
+    if(result == 0) {
+        std::cout <<"Geminiz hasar almayacak!" <<"\n";
+    }
+    else {
+        object->decrementHp(10);
+        std::cout <<"Geminiz 10 hasar alacak" <<"\n";
+    }
+
+}
+
+int EventAbandonedPlanet(MainShip* object) {
+    result = object->AbandonedPlanet();
+    if(result == 0) {
+        object->incrementMoney();
+        std::cout <<"10 altın kazandınız\n";
+        return 0;
+    }
+    else {
+        // burada 1 return edildiğinde GameFunctionda korsanlar çağrılacak
+        return 1;
+
+    }
+}
+
+
+void PiratesChoices(MainShip* object) {
+    int BargainValue = object->PiratesBargain(); //pazarlık edilecek para miktarı.
+    if(BargainValue >= object->money){
+        BargainCondition = true;
+    }
+    else if(BargainValue < object->money){
+        BargainCondition = false;
+    }
+
+    if (BargainCondition == true){
+        std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin):";
+        PiratesChoiceNumberCorrectness = false;
+        std::cin>>PiratesChoiceNumber;
+        if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2 || PiratesChoiceNumber == 3){
+            PiratesChoiceNumberCorrectness = true;
+        }
+        else {
+            std::cout<<"Lutfen gecerli bir sayi girin:";
+        }
+    }
+    else {
+        std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin)(pazarlik edilemez, yeterli altinin yok):";
+        while (PiratesChoiceNumberCorrectness == false){
+            std::cin>>PiratesChoiceNumber;
+            if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2){
+                PiratesChoiceNumberCorrectness = true;
+            }
+            else {
+                std::cout<<"Lutfen gecerli bir sayi girin:";
+            }
+        }
+    }
+    if (PiratesChoiceNumber == 1){
+        EventPiratesEscape(object);
+    }
+    else if (PiratesChoiceNumber == 2){
+        EventPiratesFight(object);
+    }
+    else if (PiratesChoiceNumber == 3){
+        EventPiratesBargain(object);
+    }
+}
+
+
+void EventPiratesFight(MainShip* object){
+    std::cout<<"Korsanlarla savasmayi sectiniz.\n";
+
+    resultFight = object->PiratesFight();
+    if (resultFight == 0){
+        std::cout<<"kazandiniz\n";
+    }
+    else {
+        object->decrementHp(30);
+        std::cout<<"yenildiniz\n";
+    }
+}
+
+void EventPiratesBargain(MainShip* object){ // pazarlık edilecek miktar hesaplanır ve eğer eldeki miktar daha büyükse ödenir.
+    int resultBargain = 0;
+    resultBargain = object->PiratesBargain(); // daha en başında pazarlık edilip edilemeyeceği game fonksiyonunda incelenecek
+    if (resultBargain == 1){
+        resultBargainQuantity = 10;
+    }
+    else if (resultBargain == 2){
+        resultBargainQuantity = 20;
+    }
+    else {
+        resultBargainQuantity = 30;
+    }
+    if (object->money >= resultBargainQuantity){
+        BargainCondition = 0;
+        object->decrementMoney(resultBargainQuantity);
+        std::cout<<"Pazarlik ettiniz ve "<<resultBargainQuantity<<" altin odediniz\n";
+    }
+
+}
+
+void PiratesEscape(MainShip* object){
+    int resultEscape = object->PiratesEscape(object->escapeX);
+    if (resultEscape == 0){
+        std::cout<<"Korsanlardan kactiniz\n";
+    }
+    else {
+        std::cout<<"Korsanlar sizi yakaladi. Secenek menusune geri donuyorsunuz\n";
+        PiratesChoices(object);
+    }
+
+}
+
+
+
+
+
+
+#endif //SVANSSSLUKARE_EVENT_H
