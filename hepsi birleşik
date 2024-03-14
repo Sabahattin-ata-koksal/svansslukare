@@ -1,0 +1,470 @@
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+#include <ctime>
+
+
+static int result{0};
+int resultEscape;
+int resultFight;
+int resultBargain;
+int resultBargainQuantity;
+int PiratesChoiceNumber;
+bool PiratesChoiceNumberCorrectness;
+bool BargainCondition; //global olursa değeri değişmez ki o zaman işe yaramaz
+
+static constexpr float RSexapeX{1.5};
+static constexpr float HSexapeX{0.5};
+static constexpr float RSdamageX{1.5};
+static constexpr float HSdamageX{0.5};
+static constexpr int FuelDecrementor{33};
+
+
+
+class Randomizer {
+public:
+
+    int firstRandom(){
+
+        int result = 1 + rand()%3;
+        return result;
+    }
+
+     int AsteroidBelt(float x)const{
+        int Aresult;
+         Aresult = 0;
+         // burada her case'te eğer 0 gelirse gemi hasar almayacak, 1 gelirse 10 hasar alacak
+            if ( x == 0.5f){
+                Aresult = 1 + rand()%4;
+                if (Aresult == 1){
+                    return 0;
+                }
+                else {
+                    return 1;
+                }
+            }
+            else if (x == 1.0f) {
+                    Aresult = 1 + rand()%4;
+                    if (Aresult == 2 || Aresult == 1) {
+                        return 0;
+                    }
+                    else {
+                        return 1;
+                    }
+            }
+            else if(x == 1.5f) {
+                    Aresult = 1 + rand() % 4;
+                    if (Aresult == 1 || Aresult == 2 || Aresult == 3) {
+                        return 0;
+                    }
+                    else {
+                        return 1;
+                    }
+                }
+        return 13;
+    }
+
+    int AbandonedPlanet(){
+        int result = rand()%2; // 0 gelirse para, 1 gelirse korsanlar gelecek
+        return result;
+    }
+
+
+    int PiratesEscape(float x){
+        int xYeni = int(x) * 10;
+        int result1, result2, result3 = 0;
+         // kaçabilmek için hepsinde 0 gelmesi lazım
+        switch(xYeni){
+            case 5:
+                result1 = 1 + rand()%4;
+                if (result1 == 0){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 10:
+                result2 = 1 + rand()%4;
+                if (result2 <= 2){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+
+            case 15:
+                result3 = 1 + rand()%4;
+                if (result3 <= 3){
+                    return 0;
+                }
+                else{
+                    return 1;
+                }
+        }
+        return 13;
+    }
+
+    int PiratesFight(){
+         // 0 gelirse bi şey yok, 1 gelirse 30 hasar alacak
+        int result = rand()%2;
+        if (result == 0){
+            return 0;
+        }
+        else if(result == 1){
+            return 1;
+        }
+        return 13;
+    }
+
+    int PiratesBargain(){
+         // 1 gelirse 10, 2 gelirse 20, 3 gelirse 30 isteyecekler
+        int result = 1 + rand()%3;
+        switch(result){
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+        }
+        return 13;
+
+    }
+
+};
+
+
+class MainShip : public Randomizer{
+public:
+    int fuel;
+    int hp;
+    int money;
+    float damageX;
+    float escapeX;
+
+public:
+    MainShip(){
+        fuel = 99;
+        hp = 100;
+        money = 0;
+        damageX =1;
+        escapeX =1;
+        std::cout << "constructor of MS" << "\n";
+    }
+
+    inline virtual void incrementMoney(){}
+    inline virtual void decrementMoney(int DMvalue){}
+    inline virtual void decrementFuel(){}
+    inline virtual void decrementHp(int DHvalue){}
+    inline virtual void decrementHpAsteroid(){}
+
+
+};
+
+class NormalShip : public MainShip{
+
+public:
+    NormalShip() : MainShip(){
+        std::cout << "constructor of NS" << "\n";
+    }
+
+
+public:
+
+    void incrementMoney() override{
+        money = money+10;
+    }
+
+    void decrementMoney(int DMvalue) override{
+        money = money - DMvalue;
+    }
+    void decrementFuel() override{
+        fuel = fuel-FuelDecrementor;
+    }
+    void decrementHp(int DHvalue) override{
+        hp = hp - (DHvalue*damageX);
+    }
+     void decrementHpAsteroid() override{
+        hp = hp - 10;
+    }
+
+
+
+};
+
+
+class RapidShip : public MainShip{
+
+public:
+    RapidShip() : MainShip(){
+        escapeX = escapeX*RSexapeX;
+        damageX = damageX*RSdamageX;
+        std::cout << "constructor of RS" << "\n";
+    }
+    void incrementMoney() override{
+        money = money+10;
+    }
+    void decrementMoney(int DMvalue) override{
+        money = money - DMvalue;
+    }
+    void decrementFuel() override{
+        fuel = fuel-FuelDecrementor;
+    }
+    void decrementHp(int DHvalue) override{
+        hp = hp - (DHvalue*damageX);
+    }
+    void decrementHpAsteroid() override{
+        hp = hp - 10;
+    }
+
+};
+
+
+class HeavyShip : public MainShip{
+public:
+    HeavyShip() : MainShip(){
+        escapeX = escapeX*HSexapeX;
+        damageX = damageX*HSdamageX;
+        std::cout << "constructor of HS" << "\n";
+    }
+
+    void incrementMoney() override{
+        money = money+10;
+    }
+    void decrementMoney(int DMvalue) override{
+        money = money - DMvalue;
+    }
+    void decrementFuel() override{
+        fuel = fuel-FuelDecrementor;
+    }
+    void decrementHp(int DHvalue) override{
+        hp = hp - (DHvalue*damageX);
+    }
+    void decrementHpAsteroid() override{
+        hp = hp - 10;
+    }
+
+};
+
+void EventPiratesEscape(MainShip* object);
+void PiratesChoices(MainShip* object);
+void EventPiratesFight(MainShip* object);
+void EventPiratesBargain(MainShip* object);
+void ShipChoosing(std::vector<std::string> vector, std::string string);
+void print();
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, MainShip* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType);
+
+
+
+void EventAsteroidBelt(MainShip* object) {
+    puts("Asteroid cagrildi");
+    result = object->AsteroidBelt(object->escapeX);
+    if(result == 0) {
+        std::cout <<"Geminiz hasar almayacak!" <<"\n";
+    }
+    else {
+        object->decrementHpAsteroid();
+        std::cout <<"Geminiz 10 hasar alacak" <<"\n";
+    }
+
+}
+
+int EventAbandonedPlanet(MainShip* object) {
+    puts("terko gezegeno cagrildi");
+    result = object->AbandonedPlanet();
+    if(result == 0) {
+        object->incrementMoney();
+        std::cout <<"10 altın kazandınız\n";
+        return 0;
+    }
+    else {
+        // burada 1 return edildiğinde GameFunctionda korsanlar çağrılacak
+        return 1;
+
+    }
+}
+
+
+void PiratesChoices(MainShip* object) {
+    puts("korsanlarla dans cagrildi");
+    int BargainValue = 10*(object->PiratesBargain()); //pazarlık edilecek para miktarı.
+    if(BargainValue >= object->money){
+        BargainCondition = true;
+    }
+    else if(BargainValue < object->money){
+        BargainCondition = false;
+    }
+
+    if (BargainCondition == true){
+        std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin):";
+        PiratesChoiceNumberCorrectness = false;
+        std::cin>>PiratesChoiceNumber;
+        if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2 || PiratesChoiceNumber == 3){
+            PiratesChoiceNumberCorrectness = true;
+        }
+        else {
+            std::cout<<"Lutfen gecerli bir sayi girin:";
+        }
+    }
+    else {
+        std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin)(pazarlik edilemez, yeterli altinin yok):";
+        while (PiratesChoiceNumberCorrectness == false){
+            std::cin>>PiratesChoiceNumber;
+            if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2){
+                PiratesChoiceNumberCorrectness = true;
+            }
+            else {
+                std::cout<<"Lutfen gecerli bir sayi girin:";
+            }
+        }
+    }
+    if (PiratesChoiceNumber == 1){
+        EventPiratesEscape(object);
+    }
+    else if (PiratesChoiceNumber == 2){
+        EventPiratesFight(object);
+    }
+    else if (PiratesChoiceNumber == 3){
+        EventPiratesBargain(object);
+    }
+}
+
+
+void EventPiratesFight(MainShip* object){
+    std::cout<<"Korsanlarla savasmayi sectiniz.\n";
+
+    resultFight = object->PiratesFight();
+    if (resultFight == 0){
+        std::cout<<"kazandiniz\n";
+    }
+    else {
+        object->decrementHp(30);
+        std::cout<<"yenildiniz\n";
+    }
+}
+
+void EventPiratesBargain(MainShip* object){ // pazarlık edilecek miktar hesaplanır ve eğer eldeki miktar daha büyükse ödenir.
+    resultBargain = 0;
+    resultBargain = object->PiratesBargain(); // daha en başında pazarlık edilip edilemeyeceği game fonksiyonunda incelenecek
+    if (resultBargain == 1){
+        resultBargainQuantity = 10;
+    }
+    else if (resultBargain == 2){
+        resultBargainQuantity = 20;
+    }
+    else {
+        resultBargainQuantity = 30;
+    }
+    if (object->money >= resultBargainQuantity){
+        BargainCondition = 0;
+        object->decrementMoney(resultBargainQuantity);
+        std::cout<<"Pazarlik ettiniz ve "<<resultBargainQuantity<<" altin odediniz\n";
+    }
+
+}
+
+void EventPiratesEscape(MainShip* object){
+    resultEscape = object->PiratesEscape(object->escapeX);
+    if (resultEscape == 0){
+        std::cout<<"Korsanlardan kactiniz\n";
+    }
+    else {
+        std::cout<<"Korsanlar sizi yakaladi. Secenek menusune geri donuyorsunuz\n";
+        PiratesChoices(object);
+    }
+
+}
+
+inline void GameFunction(MainShip* obj){
+    int GameType{0};
+    for(int i = 0; i < 5; ++i) {
+        GameType = obj->firstRandom();
+        std::cout << "oyun turu" << GameType << "\n";
+        if (GameType == 1) {
+            EventAsteroidBelt(obj);
+            std::cout << obj->hp;
+        } else if (GameType == 2) {
+            EventAbandonedPlanet(obj);
+        } else if (GameType == 3) {
+            PiratesChoices(obj);
+        }
+    }
+}
+
+inline void LowerCase(std::string &ToLower){
+
+    std::transform(ToLower.begin(), ToLower.end(), ToLower.begin(), ::tolower);
+}
+
+
+void ShipChoosing(const std::vector<std::string> ShipTypes, std::string ChosenType){
+
+    LowerCase(ChosenType);
+
+
+    for(const std::string &ShipType : ShipTypes){
+        if(ChosenType == ShipType){
+            puts("gecerli bir tur girdiniz");
+            break;
+        }
+        else if(ShipType == ShipTypes.back()){
+            puts("gecerli bir sonuc girmedin bitch");
+        }
+    }
+
+
+}
+
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, MainShip* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType){
+
+    if(ChosenType == ShipTypes.at(0)){
+        GameObject = &RShip;
+        puts("hizli gemi olusturuldu");
+        GameFunction(GameObject);
+
+
+    }
+    else if(ChosenType == ShipTypes.at(1)){
+        GameObject = &HShip;
+        puts("guclu gemi olusturuldu");
+        GameFunction(GameObject);
+
+    }
+    else if(ChosenType == ShipTypes.at(2)){
+        GameObject = &NShip;
+        puts("Normal gemi olusturuldu");
+        GameFunction(GameObject);
+
+    }
+
+}
+
+void print(){
+    puts("oyunumuza hosgeldiniz");
+    puts("3 tip gemimiz bulunmaktadir hizli gemi, guclu gemi ve normal gemi hangisini secmek istersiniz");
+    puts("hizli, guclu veya normal yaziniz");
+}
+
+int main() {
+    srand(time(NULL));
+    std::string ChosenType;
+    std::vector<std::string>ShipTypes{"hizli", "guclu", "normal"};
+    RapidShip RShip;
+    NormalShip NShip;
+    HeavyShip HShip;
+    MainShip *GameObject= nullptr;
+
+    print();
+    std::getline(std::cin, ChosenType);
+
+    ShipChoosing(ShipTypes, ChosenType);
+
+    SetPointer(RShip, HShip, NShip, GameObject, ShipTypes, ChosenType);
+    return 0;
+
+
+}
