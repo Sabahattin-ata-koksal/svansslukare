@@ -16,6 +16,7 @@ int PiratesChoiceNumber;
 bool PiratesChoiceNumberCorrectness;
 bool BargainCondition;
 bool GameControl = true; // başlangıçta döngüye girsin diye true. her event sonu yakit ve can kontrolü yapacak
+int FinalScore;
 
 static constexpr float RSexapeX{1.5};
 static constexpr float HSexapeX{0.5};
@@ -298,13 +299,32 @@ void PiratesChoices(MainShip* object) {
     }
     else if(BargainValue > object->money){
         BargainCondition = false;
-    }
+    };
 
-    int PiratesChoicesNumber;
-    int PiratesChoicesNumberCorrectness;
-    std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin";
-    
+
+    PiratesChoiceNumberCorrectness = false; // her defasında kontrol ediyor
+    PiratesChoiceNumber = false;
+    std::cout<<"Kac(1), savas(2), pazarlik et(3)(-"<<BargainValue<<"altin)";
+    while (PiratesChoiceNumberCorrectness == false){
+        std::cin>>PiratesChoiceNumber;
+        if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2 || PiratesChoiceNumber == 3){
+            if (PiratesChoiceNumber == 1){
+                EventPiratesEscape(object);
+            }
+            else if (PiratesChoiceNumber == 2){
+                EventPiratesFight(object);
+            }
+            else if (PiratesChoiceNumber == 3){
+                EventPiratesBargain(object);
+            }
+            PiratesChoiceNumberCorrectness = true;
+        }
+        else {
+            std::cout<<"Lutfen gecerli bir sayi girin:";
+        }
+    }
 }
+
 
 
 void EventPiratesFight(MainShip* object){
@@ -322,7 +342,7 @@ void EventPiratesFight(MainShip* object){
 
 inline void EventPiratesBargain(MainShip* object){ // pazarlık edilecek miktar hesaplanır ve eğer eldeki miktar daha büyükse ödenir.
     resultBargain = 0;
-    resultBargain = object->PiratesBargain(); // daha en başında pazarlık edilip edilemeyeceği game fonksiyonunda incelenecek
+    resultBargain = object->PiratesBargain();
     if (resultBargain == 1){
         resultBargainQuantity = 10;
     }
@@ -332,11 +352,13 @@ inline void EventPiratesBargain(MainShip* object){ // pazarlık edilecek miktar 
     else {
         resultBargainQuantity = 30;
     }
-    if (object->money >= resultBargainQuantity){
-        //BargainCondition = 0;
+    if (BargainCondition == true){
         object->decrementMoney(resultBargainQuantity);
         std::cout<<"Pazarlik ettiniz ve "<<resultBargainQuantity<<" altin odediniz\n";
-
+    }
+    else {
+        std::cout<<"Yeterli altininiz yok, pazarlik edilemez. Secenek menusune donuluyor\n";
+        PiratesChoices(object);
     }
 
 }
@@ -359,19 +381,20 @@ void EventPiratesEscape(MainShip* object){
 }
 
 inline void ScoreCalculator(MainShip* obj){
-
+    FinalScore = (obj->fuel)*5 + (obj->money)*10 + (obj->hp)*10;
+    std::cout<<"Oyun sonu skorunuz: "<<FinalScore;
 }
 
 inline void GameFunction(MainShip* obj){
-    int GameType{3};
+    int GameType{0};
 
 
     for(int turn = 0; turn < 5; ++turn) {
-        if (obj->fuel <= 1){
-            std::cout<<"Yeterli yakitiniz yok. Oyun bitti\n";
+        if (obj->fuel <= 1 || obj->hp <= 0){
+            std::cout<<"Yeterli yakitiniz veya saglik degeriniz yok. Oyun bitti\n";
             break;
         }
-        //GameType = obj->firstRandom();
+        GameType = obj->firstRandom();
         std::cout<<turn+1<<".eventtesiniz\n";
         std::cout << "oyun turu" << GameType << "\n";
         if (GameType == 1) {
@@ -383,6 +406,7 @@ inline void GameFunction(MainShip* obj){
         }
         std::cout<<"event sonundaki degerleriniz--> hp:"<<obj->hp<<"  altin:"<<obj->money<<"  yakit:"<<obj->fuel<<"\n";
     }
+    ScoreCalculator(obj);
 }
 
 inline void LowerCase(std::string &ToLower){
