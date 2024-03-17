@@ -1,9 +1,6 @@
-//
-// Created by user on 15.03.2024.
-//
+#ifndef SVANSSLUKARE_FINAL_RANDOMIZER_H
+#define SVANSSLUKARE_FINAL_RANDOMIZER_H
 
-#ifndef UNTITLED2_RANDOMIZER_H
-#define UNTITLED2_RANDOMIZER_H
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -11,7 +8,6 @@
 #include <algorithm>
 #include <cctype>
 #include <ctime>
-#include <memory>
 
 class Randomizer {
 public:
@@ -61,7 +57,7 @@ public:
         return AbandonedResult;
     }
 
-    [[nodiscard]] int PiratesEscape(float x) {
+    [[nodiscard]] int PiratesEscape(float x)const {
         int PiratesEscapeResult{0}; // 0 gelirse gemi kaçacak 1 gelirse gemi kaçamayacak
         if (x == 0.5f) {
             PiratesEscapeResult = 1 + rand() % 4;
@@ -108,6 +104,7 @@ public:
     [[nodiscard]] int PiratesBargain(){
         int PiratesBargainResult{0};
         PiratesBargainResult = 1 + rand()%3; // 1 gelirse 10, 2 gelirse 20, 3 gelirse 30 isteyecekler
+
         switch(PiratesBargainResult){
             case 1:
                 return 10;
@@ -120,4 +117,5 @@ public:
     }
 
 };
-#endif //UNTITLED2_RANDOMIZER_H
+
+#endif //SVANSSLUKARE_FINAL_RANDOMIZER_H
