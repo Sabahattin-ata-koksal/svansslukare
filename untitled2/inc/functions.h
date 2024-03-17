@@ -1,16 +1,15 @@
-//
-// Created by user on 16.03.2024.
-//
+#ifndef SVANSSLUKARE_FINAL_FUNCTIONS_H
+#define SVANSSLUKARE_FINAL_FUNCTIONS_H
 
-#ifndef UNTITLED2_FUNCTIONS_H
-#define UNTITLED2_FUNCTIONS_H
 #include "ship.h"
+#include "GameFunction.h"
 #include "RapidShip.h"
 #include "NormalShip.h"
 #include "HeavyShip.h"
 
-inline void LowerCase(std::string &ToLower);
+void print();
+void LowerCase(std::string &ToLower);
 void ShipChoosing(const std::vector<std::string>& ShipTypes, std::string ChosenType);
-void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, std::unique_ptr<MainShip>GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType);
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, MainShip* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType);
 
-#endif //UNTITLED2_FUNCTIONS_H
+#endif //SVANSSLUKARE_FINAL_FUNCTIONS_H
