@@ -1,11 +1,10 @@
-//
-// Created by user on 15.03.2024.
-//
+#ifndef SVANSSLUKARE_FINAL_GAMEFUNCTION_H
+#define SVANSSLUKARE_FINAL_GAMEFUNCTION_H
 
-#ifndef UNTITLED2_GAMEFUNCTION_H
-#define UNTITLED2_GAMEFUNCTION_H
 #include "ship.h"
-void GameFunction(std::unique_ptr<MainShip>obj);
-void ScoreCalculator(std::unique_ptr<MainShip>obj);
+#include "functions.h"
 
-#endif //UNTITLED2_GAMEFUNCTION_H
+ void GameFunction(MainShip* obj);
+ void ScoreCalculator(MainShip* obj);
+
+#endif //SVANSSLUKARE_FINAL_GAMEFUNCTION_H
