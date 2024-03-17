@@ -1,17 +1,14 @@
-//
-// Created by user on 15.03.2024.
-//
+#ifndef SVANSSLUKARE_FINAL_EVENT_H
+#define SVANSSLUKARE_FINAL_EVENT_H
 
-#ifndef UNTITLED2_EVENT_H
-#define UNTITLED2_EVENT_H
 #include "ship.h"
 
+void EventAsteroidBelt(MainShip* object);
+int EventAbandonedPlanet(MainShip* object);
+void EventPiratesEscape(MainShip* object, int ResultBargain);
+void PiratesChoice(MainShip* object, int BargainValue);
+void EventPiratesFight(MainShip* object);
+void EventPiratesBargain(MainShip* object, int ResultBargain);
+void PiratesChoices(MainShip* object);
 
-
-void EventAsteroidBelt(std::unique_ptr<MainShip>object);
-int EventAbandonedPlanet(std::unique_ptr<MainShip>object);
-void EventPiratesEscape(std::unique_ptr<MainShip>object);
-void PiratesChoices(std::unique_ptr<MainShip>object);
-void EventPiratesFight(std::unique_ptr<MainShip>object);
-void EventPiratesBargain(std::unique_ptr<MainShip>object);
-#endif //UNTITLED2_EVENT_H
+#endif //SVANSSLUKARE_FINAL_EVENT_H
