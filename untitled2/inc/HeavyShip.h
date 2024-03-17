@@ -1,9 +1,9 @@
-//
-// Created by user on 16.03.2024.
-//
-#ifndef UNTITLED2_HEAVYSHIP_H
-#define UNTITLED2_HEAVYSHIP_H
+
+#ifndef SVANSSLUKARE_FINAL_HEAVYSHIP_H
+#define SVANSSLUKARE_FINAL_HEAVYSHIP_H
+
 #include "ship.h"
+
 class HeavyShip : public MainShip{
 public:
     HeavyShip() : MainShip(){
@@ -20,7 +20,7 @@ public:
         money = money - DMvalue;
     }
     void decrementFuel() override{
-        fuel = fuel - FuelDecrementor;
+        fuel = fuel - FuelDecremention;
     }
     void decrementHp(float DHvalue) override{
         hp = hp - (DHvalue * damageX);
@@ -29,4 +29,5 @@ public:
         hp = hp - 10;
     }
 };
-#endif //UNTITLED2_HEAVYSHIP_H
+
+#endif //SVANSSLUKARE_FINAL_HEAVYSHIP_H
