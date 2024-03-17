@@ -1,15 +1,13 @@
-//
-// Created by user on 15.03.2024.
-//
 
-#ifndef UNTITLED2_SHIP_H
-#define UNTITLED2_SHIP_H
+#ifndef SVANSSLUKARE_FINAL_SHIP_H
+#define SVANSSLUKARE_FINAL_SHIP_H
+
 #include "randomizer.h"
 static constexpr float RSexapeX{1.5};
 static constexpr float HSexapeX{0.5};
 static constexpr float RSdamageX{1.5};
 static constexpr float HSdamageX{0.5};
-static constexpr int FuelDecrementor{33};
+constexpr int FuelDecremention{33};
 
 class MainShip : public Randomizer{
 protected:
@@ -18,6 +16,7 @@ protected:
     int money;
     float damageX;
     float escapeX;
+
 public:
     MainShip(){
         fuel = 99;
@@ -27,19 +26,22 @@ public:
         escapeX =1;
         std::cout << "constructor of MainShip" << "\n";
     }
-    inline int getFuel(){
+
+public:
+
+    [[nodiscard]] inline int getFuel() const{
         return fuel;
     }
-    inline float getHp(){
+    [[nodiscard]] inline float getHp() const{
         return hp;
     }
-    inline int getMoney(){
+    [[nodiscard]] inline int getMoney() const{
         return money;
     }
-    inline int getDamageX(){
+    [[nodiscard]] inline float getDamageX() const{
         return damageX;
     }
-    inline int getEscapeX(){
+    [[nodiscard]] inline float getEscapeX() const{
         return escapeX;
     }
 
@@ -51,6 +53,7 @@ public:
 
 };
 
+#endif //SVANSSLUKARE_FINAL_SHIP_H
 
 
 
