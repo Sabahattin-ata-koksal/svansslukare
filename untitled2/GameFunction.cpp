@@ -1,18 +1,16 @@
-//
-// Created by user on 15.03.2024.
-//
 #include "GameFunction.h"
 #include "event.h"
 
-void ScoreCalculator(std::unique_ptr<MainShip>obj){
+void ScoreCalculator(MainShip* obj){
     float FinalScore{0};
     FinalScore = static_cast<float>(obj->getFuel()) * 5 + static_cast<float>(obj->getMoney()) * 10 + (obj->getHp()) * 10;
     std::cout<<"Oyun sonu skorunuz: "<<FinalScore;
 }
 
-void GameFunction(std::unique_ptr<MainShip>obj){
+void GameFunction(MainShip* obj){
     int GameType{0};
-    bool EAPsituation{false}; //korsanların çıkma durumu
+    bool EAPsituation{false};
+    std::cout<< "oyuna baslarkenki can, para para degerleriniz:" <<obj->getHp() << ", " <<obj->getMoney() << ", " << obj->getFuel() << "\n";
 
     for(int turn = 0; turn < 5; ++turn) {
         if (obj->getFuel() <= 0 || obj->getHp() <= 0){
@@ -25,20 +23,19 @@ void GameFunction(std::unique_ptr<MainShip>obj){
         std::cout << "oyun turu" << GameType << "\n";
         puts("");
         if (GameType == 1) {
-            EventAsteroidBelt(std::move(obj));
+            EventAsteroidBelt(obj);
         } else if (GameType == 2) {
-            EAPsituation = EventAbandonedPlanet(std::move(obj));
+            EAPsituation = EventAbandonedPlanet(obj);
             if(EAPsituation == 1){
-                PiratesChoices(std::move(obj));
+                PiratesChoices(obj);
             }
         } else if (GameType == 3) {
-            PiratesChoices(std::move(obj));
+            PiratesChoices(obj);
         }
         puts("");
         std::cout<<"Event sonundaki degerleriniz--> hp:"<<obj->getHp()<<"  altin:"<<obj->getMoney()<<"  yakit:"<<obj->getFuel()<<"\n";
         puts("");
-        //std::cin.ignore();
+        std::cin.ignore();
     }
-    ScoreCalculator(std::move(obj));
+    ScoreCalculator(obj);
 }
-
