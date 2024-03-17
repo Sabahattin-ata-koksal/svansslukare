@@ -1,10 +1,17 @@
-//
-// Created by user on 16.03.2024.
-//
 #include "functions.h"
+#include "ship.h"
 #include "GameFunction.h"
 
-inline void LowerCase(std::string &ToLower){
+
+void print() {
+    puts("oyunumuza hosgeldiniz");
+    puts("3 tip gemimiz bulunmaktadir hizli gemi, guclu gemi ve normal gemi hangisini secmek istersiniz");
+    puts("hizli, guclu veya normal yaziniz");
+}
+
+
+
+ void LowerCase(std::string &ToLower){
 
     std::transform(ToLower.begin(), ToLower.end(), ToLower.begin(), ::tolower);
 }
@@ -17,38 +24,43 @@ void ShipChoosing(const std::vector<std::string>& ShipTypes, std::string ChosenT
 
     for(const std::string &ShipType : ShipTypes){
         if(ChosenType == ShipType){
-            puts("gecerli bir tur girdiniz");
+            puts("Gecerli bir gemi turu girdiniz");
+            std::cout << "sectiginiz gemi tipi:" << ShipType << "\n";
             break;
         }
         else if(ShipType == ShipTypes.back()){
-            puts("gecerli bir sonuc girmedin bitch");
+            puts("Gecerli bir gemi turu girmediniz...");
         }
     }
 
 
 }
 
-void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, std::unique_ptr<MainShip>GameObject,const std::vector<std::string>& ShipTypes, const std::string& ChosenType){
+void SetPointer(RapidShip &RShip, HeavyShip &HShip, NormalShip &NShip, MainShip* GameObject, const std::vector<std::string>& ShipTypes, const std::string& ChosenType){
 
     if(ChosenType == ShipTypes.at(0)){
-        GameObject = static_cast<std::unique_ptr<MainShip>>(&RShip);
+        GameObject = &RShip;
         puts("hizli gemi olusturuldu");
-        GameFunction(std::move(GameObject));
-
+        puts(" \n \n ");
+        std::cin.ignore();
+        GameFunction(GameObject);
 
     }
     else if(ChosenType == ShipTypes.at(1)){
-        GameObject = static_cast<std::unique_ptr<MainShip>>(&HShip);
+        GameObject = &HShip;
         puts("guclu gemi olusturuldu");
-        GameFunction(std::move(GameObject));
+        puts(" \n \n ");
+        std::cin.ignore();
+        GameFunction(GameObject);
 
     }
     else if(ChosenType == ShipTypes.at(2)){
-        GameObject = static_cast<std::unique_ptr<MainShip>>(&NShip);
+        GameObject = &NShip;
         puts("Normal gemi olusturuldu");
-        GameFunction(std::move(GameObject));
+        puts(" \n \n ");
+        std::cin.ignore();
+        GameFunction(GameObject);
 
     }
 
 }
-
