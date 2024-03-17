@@ -1,9 +1,7 @@
-//
-// Created by user on 16.03.2024.
-//
 
-#ifndef UNTITLED2_NORMALSHIP_H
-#define UNTITLED2_NORMALSHIP_H
+#ifndef SVANSSLUKARE_FINAL_NORMALSHIP_H
+#define SVANSSLUKARE_FINAL_NORMALSHIP_H
+
 #include "ship.h"
 
 class NormalShip : public MainShip{
@@ -20,7 +18,7 @@ public:
         money = money - DMvalue;
     }
     void decrementFuel() override{
-        fuel = fuel-FuelDecrementor;
+        fuel = fuel-FuelDecremention;
     }
     void decrementHp(float DHvalue) override{
         hp = hp - (DHvalue * damageX);
@@ -29,6 +27,9 @@ public:
         hp = hp - 10;
     }
 };
+
+
+#endif //SVANSSLUKARE_FINAL_NORMALSHIP_H
 
 
 #endif //UNTITLED2_NORMALSHIP_H
