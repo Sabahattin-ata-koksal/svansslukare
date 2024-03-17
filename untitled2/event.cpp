@@ -1,16 +1,16 @@
-//
-// Created by user on 15.03.2024.
-//
+
 #include <iostream>
 #include "event.h"
+#include <thread>
 
 int PiratesChoiceNumber;
 bool PiratesChoiceNumberCorrectness;
 bool BargainCondition;
+static constexpr int HpDecremention{30};
 
-
-void EventAsteroidBelt(std::unique_ptr<MainShip>object) {
+void EventAsteroidBelt(MainShip* object) {
     puts("Asteroid kusagina girmektesiniz!!!");
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     int EventAsteroidResult{0}; // 0 gelirse hasar almıyor öbür ihtimalde hasar alıyor.
     EventAsteroidResult = object->AsteroidBelt(object->getEscapeX());
     if(EventAsteroidResult == 0) {
@@ -22,8 +22,9 @@ void EventAsteroidBelt(std::unique_ptr<MainShip>object) {
     }
 }
 
-int EventAbandonedPlanet(std::unique_ptr<MainShip>object) {
+int EventAbandonedPlanet(MainShip* object) {
     puts("Terk edilmis bir gezegen bulundu.");
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     int EventAbandonedResult{0};
     EventAbandonedResult = object->AbandonedPlanet();
     if(EventAbandonedResult == 0) {
@@ -33,16 +34,23 @@ int EventAbandonedPlanet(std::unique_ptr<MainShip>object) {
     }
     else {
         std::cout<<"OLAMAZ! Bu gezegende saklanan uzay korsanlari ile karsi karsiyayiz" << "\n";
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         // burada 1 return edildiğinde GameFunctionda korsanlar çağrılacak
         return 1;
     }
 }
 
-
-void PiratesChoices(std::unique_ptr<MainShip>object) {
-    puts("DIKKAT uzay korsanlari hemen onumuzde!");
+void PiratesChoices(MainShip* object){
     int BargainValue{0};
-    BargainValue = (object->PiratesBargain()); //pazarlık edilecek para miktarı.
+    BargainValue = (object->PiratesBargain());//pazarlık edilecek para miktarı.
+    PiratesChoice(object, BargainValue);
+}
+
+
+void PiratesChoice(MainShip* object, int BargainValue) {
+    puts("DIKKAT uzay korsanlari hemen onumuzde!");
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
     if(BargainValue <= object->getMoney()){
         BargainCondition = true;
     }
@@ -58,13 +66,13 @@ void PiratesChoices(std::unique_ptr<MainShip>object) {
         std::cin>>PiratesChoiceNumber;
         if (PiratesChoiceNumber == 1 || PiratesChoiceNumber == 2 || PiratesChoiceNumber == 3){
             if (PiratesChoiceNumber == 1){
-                EventPiratesEscape(std::move(object));
+                EventPiratesEscape(object, BargainValue);
             }
             else if (PiratesChoiceNumber == 2){
-                EventPiratesFight(std::move(object));
+                EventPiratesFight(object);
             }
             else if (PiratesChoiceNumber == 3){
-                EventPiratesBargain(std::move(object));
+                EventPiratesBargain(object, BargainValue);
             }
             PiratesChoiceNumberCorrectness = true;
         }
@@ -74,44 +82,43 @@ void PiratesChoices(std::unique_ptr<MainShip>object) {
     }
 }
 
-void EventPiratesFight(std::unique_ptr<MainShip>object){
+void EventPiratesFight(MainShip* object){
     std::cout<<"Korsanlarla savasa gidiyoruz tanri turku korusun.\n";
+    std::this_thread::sleep_for(std::chrono::seconds(3));
     int resultFight{0};
     resultFight = object->PiratesFight();
     if (resultFight == 0){
         std::cout<<"Korsanlari tuzla buz ettiniz! \n";
     }
     else {
-        object->decrementHp(30);
-        std::cout<<"Korsanlar ile olan cesur savasimizi kaybettik gemimizin"<< object->getHp() << "kadar cani kaldi \n";
+        object->decrementHp(HpDecremention);
+        std::cout<<"Korsanlar ile olan cesur savasimizi kaybettik gemimizin "<< object->getHp() << " kadar cani kaldi \n";
     }
 }
 
-void EventPiratesBargain(std::unique_ptr<MainShip>object){ // pazarlık edilecek miktar hesaplanır ve eğer eldeki miktar daha büyükse ödenir.
-    int ResultBargain;
-    ResultBargain = 0;
-    ResultBargain = object->PiratesBargain();
+void EventPiratesBargain(MainShip* object, int ResultBargain){ // pazarlık edilecek miktarı alır ve eğer eldeki miktar daha büyükse ödenir.
+
     if (BargainCondition == true){
         object->decrementMoney(ResultBargain);
         std::cout<<"Pazarlik ettiniz ve "<<ResultBargain<<" altin odediniz\n";
     }
     else {
-        std::cout<<"Yeterli altinimiz yok, pazarlik etmek gibi bir secenegimiz yok...Secenek menusune donuluyor\n";
-        PiratesChoices(std::move(object));
+        std::cout<<"Yeterli altininiz yok, pazarlik etmek gibi bir secenegimiz yok...Secenek menusune donuluyor \n";
+        PiratesChoice(object, ResultBargain);
     }
 }
 
-void EventPiratesEscape(std::unique_ptr<MainShip>object){
+void EventPiratesEscape(MainShip* object, int ResultBargain){
     int EventEscapeResult{0};
     EventEscapeResult = object->PiratesEscape(object->getEscapeX());
-    if (object->getFuel()>= 33){
+    if (object->getFuel() >= FuelDecremention){
         if (EventEscapeResult == 0){
             object->decrementFuel();
-            std::cout<<"33 yakit kaybetmis olsaniz da korsanlardan kacip kurtuldunuz\n";
+            std::cout<< FuelDecremention << " yakit kaybetmis olsaniz da korsanlardan kacip kurtuldunuz \n";
         }
         else {
             std::cout<<"Korsanlardan kacmayi basaramadiniz... Secenek menusune geri donuyorsunuz\n";
-            PiratesChoices(std::move(object));
+            PiratesChoice(object, ResultBargain);
         }
     }
     else{
