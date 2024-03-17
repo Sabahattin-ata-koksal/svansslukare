@@ -1,9 +1,6 @@
-//
-// Created by user on 16.03.2024.
-//
 
-#ifndef UNTITLED2_RAPIDSHIP_H
-#define UNTITLED2_RAPIDSHIP_H
+#ifndef SVANSSLUKARE_FINAL_RAPIDSHIP_H
+#define SVANSSLUKARE_FINAL_RAPIDSHIP_H
 #include "ship.h"
 
 class RapidShip : public MainShip {
@@ -22,7 +19,7 @@ public:
         money = money - DMvalue;
     }
     void decrementFuel() override{
-        fuel = fuel-FuelDecrementor;
+        fuel = fuel-FuelDecremention;
     }
     void decrementHp(float DHvalue) override{
         hp = hp - (DHvalue * damageX);
@@ -33,4 +30,4 @@ public:
 };
 
 
-#endif //UNTITLED2_RAPIDSHIP_H
+#endif //SVANSSLUKARE_FINAL_RAPIDSHIP_H
