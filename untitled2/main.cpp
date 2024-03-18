@@ -21,5 +21,9 @@ int main() {
     ShipChoosing(ShipTypes, ChosenType);
 
     SetPointer(RShip, HShip, NShip, GameObject, ShipTypes, ChosenType);
+    
+    if (GameObject != nullptr){
+        delete GameObject;
+    }
     return 0;
 }
